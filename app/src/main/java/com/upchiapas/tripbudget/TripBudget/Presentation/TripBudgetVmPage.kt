@@ -7,12 +7,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
-fun TripBudgetVmPage() {
+fun TripBudgetVmPage(viewModel: TripBudgetViewModel = viewModel()) {
+    // Convierte el StateFlow en un State de Compose. Aquí es donde recompone.
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -25,8 +31,12 @@ fun TripBudgetVmPage() {
             style = MaterialTheme.typography.headlineLarge
         )
         Text(
-            text = "Calculadora de presupuesto para viajes",
+            text = state.statusMessage,
             style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = "Gasto total: ${state.totalCostText}",
+            style = MaterialTheme.typography.bodyLarge
         )
     }
 }
