@@ -27,9 +27,9 @@ object TripBudgetRules {
 
 object TripBudgetTexts {
     const val EMPTY = "Ingresa tus datos para calcular"
-    const val ENOUGH = "🟢 ALCANZA: tu presupuesto es suficiente"
-    const val TIGHT = "🟡 AJUSTADO: casi no te sobra dinero"
-    const val NOT_ENOUGH = "🔴 NO ALCANZA"
+    const val ENOUGH = "ALCANZA: tu presupuesto es suficiente"
+    const val TIGHT = "AJUSTADO: casi no te sobra dinero"
+    const val NOT_ENOUGH = "¡No alcanza!"
     const val REMAINING = "Dinero restante"
     const val MISSING = "Dinero faltante"
 }
@@ -57,7 +57,12 @@ data class TripBudgetUiState(
     val differenceLabel: String = "Dinero restante",
     val differenceText: String = "$0",
     val percentText: String = "0%",
-    val statusMessage: String = "Ingresa tus datos para calcular"
+    val statusMessage: String = "Ingresa tus datos para calcular",
+
+    val progress: Float = 0f,
+    val lodgingText: String = "$0",
+    val foodText: String = "$0",
+    val transportText: String = "$0"
 )
 
 class TripBudgetViewModel : ViewModel() {
@@ -133,7 +138,11 @@ class TripBudgetViewModel : ViewModel() {
             differenceLabel = if (difference >= 0) TripBudgetTexts.REMAINING else TripBudgetTexts.MISSING,
             differenceText = formatMoney(abs(difference)),
             percentText = "${usedPercent.roundToInt()}%",
-            statusMessage = statusMessage
+            statusMessage = statusMessage,
+            progress = (usedPercent / 100).coerceIn(0.0, 1.0).toFloat(),
+            lodgingText = formatMoney(lodgingTotal),
+            foodText = formatMoney(foodTotal),
+            transportText = formatMoney(transportCost)
         )
     }
 
