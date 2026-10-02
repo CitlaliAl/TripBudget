@@ -97,6 +97,11 @@ fun TripBudgetVmPage(viewModel: TripBudgetViewModel = viewModel()) {
                 onValueChange = viewModel::onTransportChange
             )
         }
+
+        Text(text = "Gasto total: ${state.totalCostText}")
+        Text(text = "${state.differenceLabel}: ${state.differenceText}")
+        Text(text = "Presupuesto utilizado: ${state.percentText}")
+        Text(text = state.statusMessage)
     }
 }
 
