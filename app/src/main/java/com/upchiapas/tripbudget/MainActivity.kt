@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.upchiapas.tripbudget.TripBudget.Presentation.TripBudgetVmPage
+import com.upchiapas.tripbudget.presentation.TripBudgetVmPage
 import com.upchiapas.tripbudget.ui.theme.TripBudgetTheme
 
 class MainActivity : ComponentActivity() {

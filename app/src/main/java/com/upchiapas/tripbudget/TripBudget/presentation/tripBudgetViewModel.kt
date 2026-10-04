@@ -1,4 +1,4 @@
-package com.upchiapas.tripbudget.TripBudget.Presentation
+package com.upchiapas.tripbudget.presentation
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -8,62 +8,6 @@ import kotlinx.coroutines.flow.update
 import kotlin.math.roundToInt
 import java.util.Locale
 import kotlin.math.abs
-enum class BudgetStatus { // Los cuatro estados posibles del presupuesto.
-    EMPTY,      // todavía no hay datos suficientes
-    ENOUGH,     // Alcanza: usa menos del 90%
-    TIGHT,      // Ajustado: entre 90% y 100%
-    NOT_ENOUGH  // No alcanza: más del 100%
-}
-object TripBudgetLimits {
-    const val MIN_PEOPLE = 1
-    const val MAX_PEOPLE = 10
-    const val MIN_DAYS = 1
-    const val MAX_DAYS = 30
-}
-object TripBudgetRules {
-    const val TIGHT_THRESHOLD = 90.0   // desde aquí el estado es AJUSTADO
-    const val FULL_THRESHOLD = 100.0   // arriba de aquí NO ALCANZA
-}
-
-object TripBudgetTexts {
-    const val EMPTY = "Ingresa tus datos para calcular"
-    const val ENOUGH = "ALCANZA: tu presupuesto es suficiente"
-    const val TIGHT = "AJUSTADO: casi no te sobra dinero"
-    const val NOT_ENOUGH = "¡No alcanza!"
-    const val REMAINING = "Dinero restante"
-    const val MISSING = "Dinero faltante"
-}
-data class TripBudgetUiState(
-    // Entradas del usuario
-    val budgetInput: String = "",
-    val people: Int = 1,
-    val days: Int = 1,
-    val lodgingInput: String = "",
-    val foodInput: String = "",
-    val includeTransport: Boolean = false,
-    val transportInput: String = "",
-
-    // Resultados numéricos
-    val lodgingTotal: Double = 0.0,
-    val foodTotal: Double = 0.0,
-    val transportTotal: Double = 0.0,
-    val totalCost: Double = 0.0,
-    val difference: Double = 0.0,
-    val usedPercent: Double = 0.0,
-    val status: BudgetStatus = BudgetStatus.EMPTY,
-
-    // Textos ya formateados para que la UI solo los muestre
-    val totalCostText: String = "$0",
-    val differenceLabel: String = "Dinero restante",
-    val differenceText: String = "$0",
-    val percentText: String = "0%",
-    val statusMessage: String = "Ingresa tus datos para calcular",
-
-    val progress: Float = 0f,
-    val lodgingText: String = "$0",
-    val foodText: String = "$0",
-    val transportText: String = "$0"
-)
 
 class TripBudgetViewModel : ViewModel() {
 
@@ -72,7 +16,7 @@ class TripBudgetViewModel : ViewModel() {
 
     // Eventos en los que la UI los llama
 
-    fun onBudgetChange(value: String) = updateInput { it.copy(budgetInput = value) }
+    fun onBudgetChange(value: String) = updateInput { it.copy(budgetInput = value) } //it es el estado actual y copy crea una copia con un campo cambiado
 
     fun onPeopleChange(value: Float) = updateInput { it.copy(people = value.roundToInt()) }
 
@@ -109,7 +53,7 @@ class TripBudgetViewModel : ViewModel() {
         val difference = budget - totalCost
         val usedPercent = if (budget > 0) totalCost / budget * 100 else 0.0
 
-        // Estado del presupuesto
+        // Estado del presupuesto, aqui evita dividir entre cero
         val status = when {
             budget <= 0.0 -> BudgetStatus.EMPTY
             usedPercent > TripBudgetRules.FULL_THRESHOLD -> BudgetStatus.NOT_ENOUGH
